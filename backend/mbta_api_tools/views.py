@@ -57,8 +57,7 @@ def getAllRoutes(request):
 def getStops(request):
   # Get parameters from request
   params = {
-    'filter[route]': request.GET['filter[route]'],
-    'filter[direction_id]': request.GET['filter[direction_id]']
+    'filter[route]': request.GET['filter[route]']
   }
   return mbtaGetHelper(stopsUrl, params, stopsBadRequestReason)
 
