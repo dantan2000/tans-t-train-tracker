@@ -1,7 +1,5 @@
-from http.client import HTTPResponse
-from xmlrpc.client import SERVER_ERROR
 from django.shortcuts import render
-from django.http import JsonResponse, HTTPResponse
+from django.http import JsonResponse, HttpResponse
 import requests
 import os
 
@@ -23,22 +21,28 @@ predictionsBadRequestReason = 'Stop or Direction is Invalid'
 # Returns a HTTP Response with error codes for API HTTP exceptions and empty data
 def mbtaGetHelper(url, params, badRequestReason):
   try:
-    r = requests.get(url, header=apiHeader, params=params)
-  except:
-    # Catch HTTP exception or non-json response from MBTA API
-    return HTTPResponse(status=503, reason='MBTA API Unavailable')
-  else:
-    # If the API response data is empty, the route or direction_id is invalid
-    data = r.json().data
-    if (data & data.len() > 0):
-      return JsonResponse(data)
+
+    r = requests.get(url, headers=apiHeader, params=params)
+
+    if (r.status_code == 200):
+      # If the API response data is empty, the route or direction_id is invalid
+      data = r.json()['data']
+      if (data is not None and len(data) > 0):
+        return JsonResponse({'data': data})
+      else:
+        return HttpResponse(status=400, reason=badRequestReason)
+    # Handle MBTA API error responses
     else:
-      return HTTPResponse(status=400, reason=badRequestReason)
+      return HttpResponse(status=503, reason='MBTA API Unavailable')
+
+  except:
+    return HttpResponse(status=500, reason='Internal Server Error')
 
 
 
 allRoutesParameters = {
-  'filter[type]': [0, 1]
+  'filter[type]': '0,1',
+  'sort': ''
 }
 
 # Gets all Light and Heavy MBTA Routes
@@ -54,9 +58,9 @@ def getStops(request):
   # Get parameters from request
   params = {
     'filter[route]': request.GET['filter[route]'],
-    'filter[direction_id]': request.GET['filter[direction_id']
+    'filter[direction_id]': request.GET['filter[direction_id]']
   }
-  return mbtaGetHelper(routesUrl, allRoutesParameters, stopsBadRequestReason)
+  return mbtaGetHelper(stopsUrl, params, stopsBadRequestReason)
 
 # Gets the predicted times the next trains will depart from 
 # a given stop and a given direction, sorted by time
@@ -66,7 +70,7 @@ def getDepartureTimes(request):
   # Get parameters from request
   params = {
     'filter[stop]': request.GET['filter[stop]'],
-    'filter[direction_id]': request.GET['filter[direction_id'],
+    'filter[direction_id]': request.GET['filter[direction_id]'],
     'sort': 'departure_time'
   }
-  return mbtaGetHelper(routesUrl, allRoutesParameters, predictionsBadRequestReason)
+  return mbtaGetHelper(predictionsUrl, params, predictionsBadRequestReason)
