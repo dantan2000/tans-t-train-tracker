@@ -161,7 +161,7 @@ class TestGetMethods(TestCase):
     expectedParams = (
       'https://api-v3.mbta.com/routes/', 
       {
-        'filter[route]': routeId,
+        'filter[id]': routeId,
         'filter[type]': '0,1',
         'sort': ''
       },

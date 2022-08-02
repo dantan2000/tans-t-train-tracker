@@ -56,7 +56,7 @@ def getAllRoutes(request):
 # Returns an HTTP Response with error codes otherwise
 def getRouteById(request, route):
   params = {
-    'filter[route]': route,
+    'filter[id]': route,
     'filter[type]': '0,1',
     'sort': ''
   }
