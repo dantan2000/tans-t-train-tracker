@@ -51,6 +51,17 @@ allRoutesParameters = {
 def getAllRoutes(request):
   return mbtaGetHelper(routesUrl, allRoutesParameters, routesBadRequestReason)
 
+# Gets an MBTA Route with the given ID
+# Returns a JSONResponse with MBTA data when successful
+# Returns an HTTP Response with error codes otherwise
+def getRouteById(request, route):
+  params = {
+    'filter[route]': route,
+    'filter[type]': '0,1',
+    'sort': ''
+  }
+  return mbtaGetHelper(routesUrl, params, routesBadRequestReason)
+
 # Gets all stops along a given route in a given direction
 # Returns a JSONResponse with MBTA data when successful
 # Returns an HTTP Response with error codes otherwise
