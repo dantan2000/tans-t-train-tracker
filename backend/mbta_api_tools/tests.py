@@ -184,15 +184,13 @@ class TestGetMethods(TestCase):
     mockReturnValue = Mock(status_code=200, json=lambda: {'data': stopsData})
 
     request = Mock(GET={
-      'filter[route]': 'route_name',
-      'filter[direction_id]': '0'
+      'filter[route]': 'route_name'
     })
 
     expectedParams = (
       'https://api-v3.mbta.com/stops/', 
       {
-        'filter[route]': 'route_name',
-        'filter[direction_id]': '0'
+        'filter[route]': 'route_name'
       },
       'Route or Direction is Invalid'
     )
