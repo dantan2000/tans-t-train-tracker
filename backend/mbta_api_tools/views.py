@@ -3,7 +3,6 @@ from django.http import JsonResponse, HttpResponse
 import requests
 import os
 
-apiHeader = { 'api_key': os.environ['MBTA_API_KEY'] }
 
 mbtaApiUrl = 'https://api-v3.mbta.com/'
 
@@ -23,7 +22,10 @@ predictionsBadRequestReason = 'Stop or Direction is Invalid'
 def mbtaGetHelper(url, params, badRequestReason):
   try:
 
-    r = requests.get(url, headers=apiHeader, params=params)
+    # Add API key to params
+    params['api_key'] = os.environ['MBTA_API_KEY']
+
+    r = requests.get(url, params=params)
 
     if (r.status_code == 200):
       # If the API response data is empty, the route or direction_id is invalid
