@@ -68,8 +68,11 @@ class TestMbtaGetHelper(TestCase):
 
     r = mbtaGetHelper(testUrl, testParams, badRequestReason)
 
+    # Add API key to testParams
+    testParams['api_key'] = os.environ['MBTA_API_KEY']
+
     # Assert requests.get was called with the proper arguments
-    mockGet.assert_called_with(testUrl, headers=apiHeader, params=testParams)
+    mockGet.assert_called_with(testUrl, params=testParams)
 
     return r
 
