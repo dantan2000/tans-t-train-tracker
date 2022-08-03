@@ -11,7 +11,7 @@ const StopList = ({ stops, sError, sLoading, directionId }) => {
             stops.map(stop =>
               <StopListItem
                 stop={stop}
-                directionId={directionId} />)
+                directionId={directionId} key={stop.id}/>)
           }
         </ul>
       }

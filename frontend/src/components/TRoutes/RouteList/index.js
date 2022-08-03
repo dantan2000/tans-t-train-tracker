@@ -9,7 +9,7 @@ const RouteList = ({ routes, rError, rLoading}) => {
         <ul className="list-group">
           {
             routes.map(route =>
-              <RouteListItem route={route}/>)
+              <RouteListItem route={route} key={route.id}/>)
           }
         </ul>
       }

@@ -38,14 +38,12 @@ const StopListItem = ({
     "type": "stop"
   }, directionId
 }) => {
-  return (
-    <Link className="text-decoration-none" to={`${stop.id}/${directionId}`}>
-      <li className="list-group-item list-group-item-action">
-        <div>
-          {stop.attributes.name}
-        </div>
-      </li>
-    </Link>
-  )
+  return <Link className="text-decoration-none" to={`${stop.id}/${directionId}`}>
+    <li className="list-group-item list-group-item-action">
+      <div>
+        {stop.attributes.name}
+      </div>
+    </li>
+  </Link>
 }
 export default StopListItem;

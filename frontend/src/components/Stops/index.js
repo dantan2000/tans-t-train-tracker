@@ -60,13 +60,13 @@ const Stops = () => {
           <div className='my-4 row'>
             <h2 className='col'>Select a Stop:</h2>
               <div className='form-group col'>
-                <label for='direction'>Destination</label>
+                <label htmlFor='direction'>Destination</label>
                 <select
                   className='form-select'
                   id='direction'
                   onChange={updateDirectionId}
                 >
-                  {currRoute.attributes.direction_destinations.map((destination, i) => <option value={i}>{destination}</option>)}
+                  {currRoute.attributes.direction_destinations.map((destination, i) => <option value={i} key={destination + String(i)}>{destination}</option>)}
                 </select>
               </div>
           </div>

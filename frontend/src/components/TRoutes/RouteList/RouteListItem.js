@@ -35,14 +35,12 @@ const RouteListItem = ({
     "type": "route"
   }
 }) => {
-  return (
-    <Link className="text-decoration-none" to={`${route.id}`}>
+  return <Link className="text-decoration-none" to={`${route.id}`}>
       <li className="list-group-item list-group-item-action">
         <div>
           {route.attributes.long_name}
         </div>
       </li>
     </Link>
-  )
 }
 export default RouteListItem;
