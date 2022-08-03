@@ -6,16 +6,16 @@ const Departures = () => {
 
   const { routeId, stopId, directionId } = useParams();
 
-  // Whether the list of routes is loading
+  // Whether the current route data is loading
   const [rLoading, setRLoading] = useState(true);
-  // Whether an error occurred loading the list of routes
+  // Whether an error occurred loading the current route
   const [rError, setRError] = useState(false);
-  // State variable for the list of routes
+  // State variable for the current route
   const [currRoute, setCurrRoute] = useState(null);
 
   // Initialize route state variables
   useEffect(() => {
-    // Check if routes is empty and no error has occurred
+    // Check if the current route is unitialized and no error has occurred
     if (currRoute == null && !rError) {
       getRouteById(routeId)
         .then(response => setCurrRoute(response[0])) // Update route with response
@@ -60,26 +60,6 @@ const Departures = () => {
     }
   });
 
-  // Gets the ISO 8601 date with timezone offset
-  // Used to generate list item keys and for testing purposes
-  // from https://stackoverflow.com/questions/17415579/how-to-iso-8601-format-a-date-with-timezone-offset-in-javascript
-  function toIsoString(date) {
-    var tzo = -date.getTimezoneOffset(),
-        dif = tzo >= 0 ? '+' : '-',
-        pad = function(num) {
-            return (num < 10 ? '0' : '') + num;
-        };
-  
-    return date.getFullYear() +
-        '-' + pad(date.getMonth() + 1) +
-        '-' + pad(date.getDate()) +
-        'T' + pad(date.getHours()) +
-        ':' + pad(date.getMinutes()) +
-        ':' + pad(date.getSeconds()) +
-        dif + pad(Math.floor(Math.abs(tzo) / 60)) +
-        ':' + pad(Math.abs(tzo) % 60);
-  }
-
   return <>
     {(rLoading || sLoading || dLoading) && !(rError || sError || dError) && <div>Loading...</div>}
     {(rError || sError || dError) && <div>An unexpected error occured. Please try again later.</div>}
@@ -90,7 +70,7 @@ const Departures = () => {
         <ul className='list-group'>
           {departures.map((departure) => {
             const departureDate = new Date(departure.attributes.departure_time);
-            return <li className='list-group-item' key={`departure_${toIsoString(departureDate)}`}>{departureDate.getHours()}:{String(departureDate.getMinutes()).padStart(2, '0')}</li>
+            return <li className='list-group-item' key={departureDate.toISOString()}>{departureDate.getHours()}:{String(departureDate.getMinutes()).padStart(2, '0')}</li>
           })}
         </ul>
       </div>
