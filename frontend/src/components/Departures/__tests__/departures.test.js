@@ -39,6 +39,7 @@ describe('List of T Stops', () => {
     expect(services.getStopById).toBeCalledWith(stopId);
     expect(services.getRouteById).toBeCalledWith(routeId);
     expect(services.getDepartureTimes).toBeCalledWith(stopId, directionId);
+    
     // Map over routes data to make sure each time is displayed properly
     testdata.predictionsData.map((prediction) => {
       const date = new Date(prediction.attributes.departure_time);

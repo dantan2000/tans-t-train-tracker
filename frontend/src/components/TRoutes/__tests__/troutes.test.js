@@ -7,8 +7,6 @@ import { BrowserRouter } from 'react-router-dom';
 
 jest.mock('../../../services/mbta-services');
 
-let container;
-
 describe('List of T Routes', () => {
   beforeEach(() => {
     services.getRoutes.mockReset();
@@ -17,9 +15,11 @@ describe('List of T Routes', () => {
     // Mock successful routesData
     services.getRoutes.mockResolvedValueOnce(testdata.routesData);
     render(<BrowserRouter><TRoutes/></BrowserRouter>);
+
     // Await component update
     await waitForElementToBeRemoved(() => screen.queryByText(/loading/i))
     expect(services.getRoutes).toBeCalledTimes(1);
+
     // Map over routes data to make sure each route is displayed properly
     testdata.routesData.map((route) => {
       const listElement = screen.getByText(route.attributes.long_name);
@@ -31,7 +31,11 @@ describe('List of T Routes', () => {
     services.getRoutes.mockRejectedValue(new Error());
     render(<BrowserRouter><TRoutes/></BrowserRouter>);
     expect(services.getRoutes).toBeCalledTimes(1);
+
+    // Await component update
     await waitForElementToBeRemoved(() => screen.queryByText(/loading/i))
+
+    // Expect error message
     expect(screen.queryByText(/error/i)).toBeInTheDocument();
   });
 });

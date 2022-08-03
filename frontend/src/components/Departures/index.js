@@ -13,7 +13,7 @@ const Departures = () => {
   // State variable for the current route
   const [currRoute, setCurrRoute] = useState(null);
 
-  // Initialize route state variables
+  // Initialize current route state variables
   useEffect(() => {
     // Check if the current route is unitialized and no error has occurred
     if (currRoute == null && !rError) {
@@ -25,14 +25,14 @@ const Departures = () => {
   })
 
 
-  // Whether the list of stops is loading
+  // Whether the current stop data is loading
   const [sLoading, setSLoading] = useState(true);
-  // Whether an error occurred loading the list of stops
+  // Whether an error occurred loading the current stop
   const [sError, setSError] = useState(false);
-  // State variable for the list of stops
+  // State variable for the current stop
   const [currStop, setCurrStop] = useState(null);
 
-  // Initialize stop state variables
+  // Initialize current stop state variables
   useEffect(() => {
     if (currStop == null && !sError) {
       getStopById(stopId)
@@ -50,7 +50,7 @@ const Departures = () => {
   // State variable for the list of stops
   const [departures, setDepartures] = useState([]);
 
-  // Initialize stop state variables
+  // Initialize departures state variables
   useEffect(() => {
     if (departures.length === 0 && !dError) {
       getDepartureTimes(stopId, directionId)

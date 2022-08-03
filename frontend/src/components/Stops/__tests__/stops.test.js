@@ -35,6 +35,7 @@ describe('List of T Stops', () => {
     expect(services.getStops).toBeCalledTimes(1);
     expect(services.getStops).toBeCalledWith(routeId);
     expect(services.getRouteById).toBeCalledWith(routeId)
+    
     // Map over routes data to make sure each stop is displayed properly
     testdata.stopsData.map((stop) => {
       const listElement = screen.getByText(stop.attributes.name);

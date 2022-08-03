@@ -8,16 +8,16 @@ const Stops = () => {
 
   const { routeId } = useParams();
 
-  // Whether the list of routes is loading
+  // Whether the current route data is loading
   const [rLoading, setRLoading] = useState(true);
-  // Whether an error occurred loading the list of routes
+  // Whether an error occurred loading the current route
   const [rError, setRError] = useState(false)
-  // State variable for the list of routes
+  // State variable for the current route
   const [currRoute, setCurrRoute] = useState(null);
 
-  // Initialize route state variables
+  // Initialize current route state variables
   useEffect(() => {
-    // Check if routes is empty and no error has occurred
+    // Check if the current route is uninitialized and no error has occurred
     if (currRoute == null && !rError) {
       getRouteById(routeId)
         .then(response => setCurrRoute(response[0])) // Update route with response
