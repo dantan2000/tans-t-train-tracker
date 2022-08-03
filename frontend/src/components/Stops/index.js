@@ -59,7 +59,7 @@ const Stops = () => {
         <div>
           <div className='my-4 row'>
             <h2 className='col'>Select a Stop:</h2>
-              <div class='form-group col'>
+              <div className='form-group col'>
                 <label for='direction'>Destination</label>
                 <select
                   className='form-select'
