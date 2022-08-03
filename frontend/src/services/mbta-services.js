@@ -1,5 +1,6 @@
 import axios from 'axios';
-const BACKEND_BASE = 'http://127.0.0.1:8000/mbta_api/';
+
+export const BACKEND_BASE = 'http://127.0.0.1:8000/mbta_api/';
 const ROUTES_URL = `${BACKEND_BASE}routes/`;
 const STOPS_URL = `${BACKEND_BASE}stops/`;
 const DEPARTURES_URL = `${BACKEND_BASE}departures/`;
