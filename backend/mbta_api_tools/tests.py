@@ -18,11 +18,25 @@ class TestUrls(TestCase):
       resolve(url).func, getAllRoutes, '/mbta_api/routes/ is not resolved'
     )
 
+  def test_route_by_id_url_is_resolved(self):
+    url = reverse('routeById', args=['routeId'])
+    self.assertEquals(url, '/mbta_api/routes/routeId', '/mbta_api/routes/<route> url is not properly configured')
+    self.assertEquals(
+      resolve(url).func, getRouteById, '/mbta_api/routes/<route> is not resolved'
+    )
+
   def test_stops_url_is_resolved(self):
     url = reverse('stops')
     self.assertEquals(url, '/mbta_api/stops/', 'mbta_api/stops/ url is not properly configured')
     self.assertEquals(
       resolve(url).func, getStops, '/mbta_api/stops/ is not resolved'
+    )
+
+  def test_stop_by_id_url_is_resolved(self):
+    url = reverse('stopById', args=['stopId'])
+    self.assertEquals(url, '/mbta_api/stops/stopId', '/mbta_api/stops/<stop> url is not properly configured')
+    self.assertEquals(
+      resolve(url).func, getStopById, '/mbta_api/stops/<stop> is not resolved'
     )
 
   def test_departures_url_is_resolved(self):
@@ -142,26 +156,80 @@ class TestGetMethods(TestCase):
     self.get_test_helper(getAllRoutes, mockHelper, mockReturnValue, request, expectedParams)
 
 
+  # Test getRouteById calls helper method with expected parameters
+  def test_get_route_by_id(self, mockHelper):
+    # Mock response from mbtaGetHelper
+    mockReturnValue = Mock(status_code=200, json=lambda: {'data': routesData})
+
+    request = {}
+
+    routeId = uuid.uuid1()
+
+    expectedParams = (
+      'https://api-v3.mbta.com/routes/', 
+      {
+        'filter[id]': routeId,
+        'filter[type]': '0,1',
+        'sort': ''
+      },
+      'No Routes Found'
+    )
+
+    # Mock response from mbtaGetHelper
+    mockHelper.return_value = mockReturnValue
+
+    r = getRouteById(request, routeId)
+    # Assert helper was called with the parameters
+    mockHelper.assert_called_with(*expectedParams)
+    # Assert result from helper was returned properly
+    self.assertEqual(r, mockReturnValue, 'Result from mbtaGetHelper was not returned')
+
+
   # Test getStops calls helper method with expected parameters
   def test_get_stops(self, mockHelper):
     # Mock response from mbtaGetHelper
     mockReturnValue = Mock(status_code=200, json=lambda: {'data': stopsData})
 
     request = Mock(GET={
-      'filter[route]': 'route_name',
-      'filter[direction_id]': '0'
+      'filter[route]': 'route_name'
     })
 
     expectedParams = (
       'https://api-v3.mbta.com/stops/', 
       {
-        'filter[route]': 'route_name',
-        'filter[direction_id]': '0'
+        'filter[route]': 'route_name'
       },
       'Route or Direction is Invalid'
     )
 
     self.get_test_helper(getStops, mockHelper, mockReturnValue, request, expectedParams)
+
+    
+  # Test getRouteById calls helper method with expected parameters
+  def test_get_stop_by_id(self, mockHelper):
+    # Mock response from mbtaGetHelper
+    mockReturnValue = Mock(status_code=200, json=lambda: {'data': stopsData})
+
+    request = {}
+
+    stopId = uuid.uuid1()
+
+    expectedParams = (
+      'https://api-v3.mbta.com/stops/', 
+      {
+        'filter[id]': stopId,
+      },
+      'No Stop Found'
+    )
+
+    # Mock response from mbtaGetHelper
+    mockHelper.return_value = mockReturnValue
+
+    r = getStopById(request, stopId)
+    # Assert helper was called with the parameters
+    mockHelper.assert_called_with(*expectedParams)
+    # Assert result from helper was returned properly
+    self.assertEqual(r, mockReturnValue, 'Result from mbtaGetHelper was not returned')
 
 
   # Test getDepartureTimes calls helper method with expected parameters

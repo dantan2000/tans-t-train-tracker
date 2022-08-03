@@ -14,6 +14,7 @@ predictionsUrl = mbtaApiUrl + 'predictions/'
 # HTTP Error Messages
 routesBadRequestReason = 'No Routes Found'
 stopsBadRequestReason = 'Route or Direction is Invalid'
+stopIdBadRequestReason = 'No Stop Found'
 predictionsBadRequestReason = 'Stop or Direction is Invalid'
 
 # Makes an API call to the given url with the given parameters
@@ -51,16 +52,36 @@ allRoutesParameters = {
 def getAllRoutes(request):
   return mbtaGetHelper(routesUrl, allRoutesParameters, routesBadRequestReason)
 
+# Gets an MBTA Route with the given ID
+# Returns a JSONResponse with MBTA data when successful
+# Returns an HTTP Response with error codes otherwise
+def getRouteById(request, route):
+  params = {
+    'filter[id]': route,
+    'filter[type]': '0,1',
+    'sort': ''
+  }
+  return mbtaGetHelper(routesUrl, params, routesBadRequestReason)
+
 # Gets all stops along a given route in a given direction
 # Returns a JSONResponse with MBTA data when successful
 # Returns an HTTP Response with error codes otherwise
 def getStops(request):
   # Get parameters from request
   params = {
-    'filter[route]': request.GET['filter[route]'],
-    'filter[direction_id]': request.GET['filter[direction_id]']
+    'filter[route]': request.GET['filter[route]']
   }
   return mbtaGetHelper(stopsUrl, params, stopsBadRequestReason)
+
+# Gets an MBTA Stop with the given ID
+# Returns a JSONResponse with MBTA data when successful
+# Returns an HTTP Response with error codes otherwise
+def getStopById(request, stop):
+  # Get parameters from request
+  params = {
+    'filter[id]': stop
+  }
+  return mbtaGetHelper(stopsUrl, params, stopIdBadRequestReason)
 
 # Gets the predicted times the next trains will depart from 
 # a given stop and a given direction, sorted by time
