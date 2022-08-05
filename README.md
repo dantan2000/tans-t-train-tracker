@@ -1,6 +1,16 @@
 # tans-t-train-tracker
 Finds the next departing train for stops on the MBTA T train system.
 
+## Frontend Setup
+
+Requires Node.js
+
+cd into the frontend folder - `cd frontend`
+
+Install dependencies - `npm install` 
+
+Run Server - `npm start`
+
 
 ## Backend Setup
 
